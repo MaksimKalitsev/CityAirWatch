@@ -1,6 +1,5 @@
 package ua.zp.cityairwatch
 
-import android.graphics.fonts.FontStyle
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,11 +7,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,16 +43,40 @@ fun MyApp(modifier: Modifier = Modifier) {
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            ConnectDevice()
             Button()
         }
     }
 }
 
 @Composable
+fun ConnectDevice(modifier: Modifier = Modifier) {
+    Column(
+        modifier.padding(10.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Connecting...",
+            fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+            color = Color.White,
+            fontSize = 20.sp
+        )
+        LinearProgressIndicator(
+            color = Color.White
+        )
+    }
+}
+
+@Composable
 fun Button() {
-    ElevatedButton(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(Color.White)) {
+    ElevatedButton(
+        onClick = { /*TODO*/ },
+        colors = ButtonDefaults.buttonColors(Color.White),
+        modifier = Modifier.padding(100.dp)
+    ) {
         Text(
             text = "Watch",
             color = TextButton,
