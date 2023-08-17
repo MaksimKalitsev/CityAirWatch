@@ -23,7 +23,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             CityAirWatchTheme() {
 
-                Navigation()
+                Navigation(onBluetoothStateChanged = {
+                    showBluetoothDialog()
+                })
             }
         }
     }
@@ -33,15 +35,20 @@ class MainActivity : ComponentActivity() {
         showBluetoothDialog()
     }
 
+    private var isBluetoothDialogAlreadyShown = false
     private fun showBluetoothDialog() {
         if (!bluetoothAdapter.isEnabled) {
-            val enableBluetoothIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startBluetoothIntentForResult.launch(enableBluetoothIntent)
+            if (!isBluetoothDialogAlreadyShown) {
+                val enableBluetoothIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                startBluetoothIntentForResult.launch(enableBluetoothIntent)
+                isBluetoothDialogAlreadyShown = true
+            }
         }
     }
 
     private val startBluetoothIntentForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            isBluetoothDialogAlreadyShown = false
             if (result.resultCode != Activity.RESULT_OK) {
                 showBluetoothDialog()
             }

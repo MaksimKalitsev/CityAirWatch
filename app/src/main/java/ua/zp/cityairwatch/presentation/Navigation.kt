@@ -6,14 +6,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun Navigation() {
+fun Navigation(
+    onBluetoothStateChanged: () -> Unit
+) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.StartScreen.route) {
         composable(Screen.StartScreen.route) {
             StartScreen(navController = navController)
         }
         composable(Screen.ResultScreen.route) {
-            ResultScreen()
+            ResultScreen(onBluetoothStateChanged)
         }
     }
 }
