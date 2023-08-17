@@ -19,35 +19,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//
-//@Composable
-//fun MyApp(modifier: Modifier = Modifier) {
-//    Surface(
-//        modifier = modifier.fillMaxSize(),
-//        color = Background
-//    ) {
-//        Column(
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//        ) {
-//            WatchButton()
-//        }
-//    }
-//}
-
-//@Composable
-//fun WatchButton() {
-//    ElevatedButton(
-//        onClick = { /*TODO*/ },
-//        colors = ButtonDefaults.buttonColors(Color.White),
-//        modifier = Modifier.padding(100.dp)
-//    ) {
-//        Text(
-//            text = "Watch",
-//            color = TextButton,
-//            fontWeight = FontWeight.Bold,
-//            fontStyle = FontStyle.Italic,
-//            fontSize = 30.sp
-//        )
-//    }
-//}
