@@ -8,6 +8,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import ua.zp.cityairwatch.data.SensorResultReceiveManager
+import ua.zp.cityairwatch.data.ble.SensorResultBLEReceiveManager
 import javax.inject.Singleton
 
 @Module
@@ -19,5 +21,14 @@ object AppModule {
     fun provideBluetoothAdapter(@ApplicationContext context: Context): BluetoothAdapter {
         val manager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         return manager.adapter
+    }
+
+    @Provides
+    @Singleton
+    fun provideSensorResultReceiveManager(
+        @ApplicationContext context: Context,
+        bluetoothAdapter: BluetoothAdapter
+    ): SensorResultReceiveManager {
+        return SensorResultBLEReceiveManager(bluetoothAdapter, context)
     }
 }
