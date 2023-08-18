@@ -1,5 +1,6 @@
 package ua.zp.cityairwatch.data.ble
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
@@ -22,6 +23,7 @@ import ua.zp.cityairwatch.util.Resource
 import java.util.UUID
 import javax.inject.Inject
 
+@SuppressLint("MissingPermission")
 class SensorResultBLEReceiveManager @Inject constructor(
     private val bluetoothAdapter: BluetoothAdapter,
     private val context: Context
@@ -31,8 +33,7 @@ class SensorResultBLEReceiveManager @Inject constructor(
     private val SENSOR_RESULT_SERVICE_UIID = "0000aa20-0000-1000-8000-00805f9b34fb"
     private val SENSOR_RESULT_CHARACTERISTICS_UUID = "0000aa21-0000-1000-8000-00805f9b34fb"
 
-    override val data: MutableSharedFlow<Resource<SensorResult>>
-        get() = MutableSharedFlow()
+    override val data: MutableSharedFlow<Resource<SensorResult>> = MutableSharedFlow()
 
     private val bleScanner by lazy {
         bluetoothAdapter.bluetoothLeScanner
@@ -50,7 +51,7 @@ class SensorResultBLEReceiveManager @Inject constructor(
 
     private val scanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
-            if (result.device.name == DEVICE_NAME) {
+            if (result?.device?.name == DEVICE_NAME) {
                 coroutineScope.launch {
                     data.emit(Resource.Loading(message = "Connecting to device..."))
                 }
@@ -73,7 +74,7 @@ class SensorResultBLEReceiveManager @Inject constructor(
                     coroutineScope.launch {
                         data.emit(Resource.Loading(message = "Discovering Services..."))
                     }
-                    gatt.discoverServices()
+                    gatt?.discoverServices()
                     this@SensorResultBLEReceiveManager.gatt = gatt
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                     coroutineScope.launch {
@@ -87,10 +88,10 @@ class SensorResultBLEReceiveManager @Inject constructor(
                             )
                         )
                     }
-                    gatt.close()
+                    gatt?.close()
                 }
             } else {
-                gatt.close()
+                gatt?.close()
                 currentConnectionAttempt += 1
                 coroutineScope.launch {
                     data.emit(
