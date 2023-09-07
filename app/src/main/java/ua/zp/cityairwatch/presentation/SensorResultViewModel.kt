@@ -20,7 +20,7 @@ class SensorResultViewModel @Inject constructor(
     var initializingMessage by mutableStateOf<String?>(null)
     var errorMessage by mutableStateOf<String?>(null)
     var temperature by mutableStateOf(0f)
-    var co2 by mutableStateOf(0f)
+    var humidity by mutableStateOf(0f)
     var connectionState by mutableStateOf<ConnectionState>(ConnectionState.Uninitialized)
 
     private fun subscribeToChanges() {
@@ -30,7 +30,7 @@ class SensorResultViewModel @Inject constructor(
                     is Resource.Success -> {
                         connectionState = result.data.connectionState
                         temperature = result.data.temperature
-                        co2 = result.data.co2
+                        humidity = result.data.humidity
                     }
 
                     is Resource.Loading -> {

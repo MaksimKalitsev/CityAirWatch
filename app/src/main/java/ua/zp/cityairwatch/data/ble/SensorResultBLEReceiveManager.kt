@@ -29,9 +29,9 @@ class SensorResultBLEReceiveManager @Inject constructor(
     private val context: Context
 ) : SensorResultReceiveManager {
 
-    private val DEVICE_NAME = "CITY_AIR_SENSOR"
-    private val SENSOR_RESULT_SERVICE_UIID = "0000aa20-0000-1000-8000-00805f9b34fb"
-    private val SENSOR_RESULT_CHARACTERISTICS_UUID = "0000aa21-0000-1000-8000-00805f9b34fb"
+    private val DEVICE_NAME = "CityAirWatch"
+    private val SENSOR_RESULT_SERVICE_UUID = "1958930a-4afc-11ee-be56-0242ac120002"
+    private val SENSOR_RESULT_CHARACTERISTICS_UUID = "a581f042-4afc-11ee-be56-0242ac120002"
 
     override val data: MutableSharedFlow<Resource<SensorResult>> = MutableSharedFlow()
 
@@ -56,7 +56,7 @@ class SensorResultBLEReceiveManager @Inject constructor(
                     data.emit(Resource.Loading(message = "Connecting to device..."))
                 }
                 if (isScanning) {
-                    result.device.connectGatt(context, false, gattCallback)
+                    result?.device?.connectGatt(context, false, gattCallback)
                     isScanning = false
                     bleScanner.stopScan(this)
                 }
@@ -121,8 +121,9 @@ class SensorResultBLEReceiveManager @Inject constructor(
         }
 
         override fun onMtuChanged(gatt: BluetoothGatt, mtu: Int, status: Int) {
+
             val characteristic =
-                findCharacteristics(SENSOR_RESULT_SERVICE_UIID, SENSOR_RESULT_CHARACTERISTICS_UUID)
+                findCharacteristics(SENSOR_RESULT_SERVICE_UUID, SENSOR_RESULT_CHARACTERISTICS_UUID)
             if (characteristic == null) {
                 coroutineScope.launch {
                     data.emit(Resource.Error(errorMessage = "Could not find result publisher"))
@@ -132,20 +133,22 @@ class SensorResultBLEReceiveManager @Inject constructor(
             enableNotification(characteristic)
         }
 
+
         override fun onCharacteristicChanged(
             gatt: BluetoothGatt,
             characteristic: BluetoothGattCharacteristic,
+            value: ByteArray
         ) {
             with(characteristic) {
                 when (uuid) {
                     UUID.fromString(SENSOR_RESULT_CHARACTERISTICS_UUID) -> {
-                        // format XX XX XX XX XX XX
-                        val multiplicator = if (value.first().toInt() > 0) -1 else 1
-                        val temperature = value[1].toInt() + value[2].toInt() / 10f
-                        val co2 = value[4].toInt() + value[5].toInt() / 10f
+                        val temperature =
+                            (value[0].toInt() + (value[1].toInt() shl 8)).toFloat() / 100f
+                        val humidity =
+                            (value[2].toInt() + (value[3].toInt() shl 8)).toFloat() / 100f
                         val sensorResult = SensorResult(
-                            multiplicator * temperature,
-                            co2,
+                            temperature,
+                            humidity,
                             ConnectionState.Connected
                         )
                         coroutineScope.launch {
@@ -214,7 +217,7 @@ class SensorResultBLEReceiveManager @Inject constructor(
     override fun closeConnection() {
         bleScanner.stopScan(scanCallback)
         val characteristic =
-            findCharacteristics(SENSOR_RESULT_SERVICE_UIID, SENSOR_RESULT_CHARACTERISTICS_UUID)
+            findCharacteristics(SENSOR_RESULT_SERVICE_UUID, SENSOR_RESULT_CHARACTERISTICS_UUID)
         if (characteristic != null) {
             disconnectCharacteristic(characteristic)
         }
