@@ -223,7 +223,7 @@ fun CircleImage(circleSize: Dp, headText: String, resultText: String, temperatur
     }
 }
 fun temperatureToColor(temperature: Float): Color {
-    val normalizedTemperature = ((temperature + 20) / 70).coerceIn(0f, 1f)
+    val normalizedTemperature = ((temperature + 10) / 50).coerceIn(0f, 1f)
     return Color(
         red = normalizedTemperature,
         green = 0f,
