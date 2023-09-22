@@ -29,5 +29,6 @@ The app connects to the ESP32 device and displays real-time sensor data with ani
 
 ## Screenshots:
   <img src="https://github.com/MaksimKalitsev/CityAirWatch/blob/master/photo_2023-09-11_11-42-31.jpg" width="300" height="600"> <img src="https://github.com/MaksimKalitsev/CityAirWatch/blob/master/photo_2023-09-11_11-42-31%20(2).jpg" width="300" height="600">         
-  <img src="https://github.com/MaksimKalitsev/CityAirWatch/blob/master/photo_2023-09-11_11-42-31%20(4).jpg" width="300" height="600"> <img src="https://github.com/MaksimKalitsev/CityAirWatch/blob/master/ezgif.com-video-to-gif.gif" width="300" height="600">
+  <img src="https://github.com/MaksimKalitsev/CityAirWatch/blob/master/photo_2023-09-11_11-42-31%20(4).jpg" width="300" height="600">
+  <img src="https://github.com/MaksimKalitsev/CityAirWatch/blob/master/ezgif.com-video-to-gif.gif" width="300" height="600">
   <img src="https://github.com/MaksimKalitsev/CityAirWatch/blob/master/Screenshot_Arduino.jpg" width="600" height="300">
